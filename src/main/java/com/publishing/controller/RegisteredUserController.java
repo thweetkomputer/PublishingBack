@@ -1,6 +1,8 @@
 package com.publishing.controller;
 
 
+import com.publishing.common.lang.Result;
+import com.publishing.entity.RegisteredUser;
 import com.publishing.service.RegisteredUserService;
 import javafx.beans.binding.ObjectExpression;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,6 @@ public class RegisteredUserController {
 
     @GetMapping("/index")
     public Object index() {
-        return userService.getById(1L);
+        return Result.succeed(200, "你为什么要超管的信息？", userService.getById(1L));
     }
 }
