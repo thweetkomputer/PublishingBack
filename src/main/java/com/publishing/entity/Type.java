@@ -11,18 +11,18 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author JerryZhao
- * @since 2021-05-09
+ * @since 2021-05-11
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Write implements Serializable {
+public class Type implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long writerId;
-
     private Long passageId;
+
+    private String type;
 
 
 }

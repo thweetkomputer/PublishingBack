@@ -1,6 +1,6 @@
 package com.publishing.service;
 
-import com.publishing.entity.RegisteredUser;
+import com.publishing.entity.Type;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author JerryZhao
  * @since 2021-05-11
  */
-public interface RegisteredUserService extends IService<RegisteredUser> {
+public interface TypeService extends IService<Type> {
 
 }

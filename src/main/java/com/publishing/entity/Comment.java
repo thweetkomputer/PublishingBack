@@ -29,8 +29,6 @@ public class Comment implements Serializable {
 
     private LocalDateTime createdTime;
 
-    private Integer isVip;
-
     private Long passageId;
 
     private Long writerId;

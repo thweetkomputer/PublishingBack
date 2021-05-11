@@ -2,9 +2,9 @@ package com.publishing.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
+import java.time.LocalDate;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
-import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author JerryZhao
- * @since 2021-05-09
+ * @since 2021-05-11
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -50,6 +50,12 @@ public class RegisteredUser implements Serializable {
     private Integer status;
 
     private String description;
+
+    private LocalDate birth;
+
+    private Integer gender;
+
+    private String avatar;
 
 
 }

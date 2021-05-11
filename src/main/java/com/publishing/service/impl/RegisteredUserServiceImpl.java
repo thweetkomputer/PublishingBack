@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author JerryZhao
- * @since 2021-05-09
+ * @since 2021-05-11
  */
 @Service
 public class RegisteredUserServiceImpl extends ServiceImpl<RegisteredUserMapper, RegisteredUser> implements RegisteredUserService {

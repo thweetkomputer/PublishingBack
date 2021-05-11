@@ -2,9 +2,7 @@ package com.publishing.controller;
 
 
 import com.publishing.common.lang.Result;
-import com.publishing.entity.RegisteredUser;
 import com.publishing.service.RegisteredUserService;
-import javafx.beans.binding.ObjectExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
