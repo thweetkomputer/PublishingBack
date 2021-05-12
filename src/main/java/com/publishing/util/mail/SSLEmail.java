@@ -1,4 +1,4 @@
-package com.publishing.mail;
+package com.publishing.util.mail;
 
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;

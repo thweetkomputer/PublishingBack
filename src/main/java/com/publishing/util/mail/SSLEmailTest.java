@@ -1,4 +1,4 @@
-package com.publishing.mail;
+package com.publishing.util.mail;
 
 public class SSLEmailTest {
     public static void main(String[] args) {

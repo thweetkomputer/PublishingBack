@@ -1,6 +1,6 @@
 package com.publishing;
 
-import com.publishing.mail.SSLEmail;
+import com.publishing.util.mail.SSLEmail;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
