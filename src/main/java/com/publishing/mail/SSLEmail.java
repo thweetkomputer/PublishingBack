@@ -5,7 +5,7 @@ import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import java.util.Properties;
 
-class SSLEmail {
+public class SSLEmail {
 
     /**
      Outgoing Mail (SMTP) Server
