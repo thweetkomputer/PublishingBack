@@ -2,12 +2,12 @@ package com.publishing.controller;
 
 
 import com.publishing.common.lang.Result;
+import com.publishing.entity.RegisteredUser;
 import com.publishing.service.RegisteredUserService;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -23,8 +23,15 @@ public class RegisteredUserController {
     @Autowired
     RegisteredUserService userService;
 
+    @RequiresAuthentication
     @GetMapping("/index")
     public Object index() {
         return Result.succeed(200, "你为什么要超管的信息？", userService.getById(1L));
+    }
+
+    @PostMapping("/save")
+    public Result save(@Validated @RequestBody RegisteredUser user) {
+        return Result.succeed(user);
+
     }
 }

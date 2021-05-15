@@ -10,6 +10,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 /**
  * <p>
  * 
@@ -29,12 +33,18 @@ public class RegisteredUser implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
+    @NotBlank(message = "用户名不能为空")
     private String username;
 
+
+    @Size(max = 18, min = 6, message = "密码长度错误")
     private String password;
 
+    @NotBlank(message = "邮箱不能为空")
+    @Email(message = "邮箱格式不正确")
     private String email;
 
+    @Size(max = 11, min = 11, message = "号码长度错误")
     private String phone;
 
     private Integer isWriter;
