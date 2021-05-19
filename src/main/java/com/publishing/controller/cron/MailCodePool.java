@@ -18,7 +18,7 @@ public class MailCodePool {
         Properties properties = new Properties();
         properties.put("email", email);
         properties.put("code", code);
-        properties.put("time", new Date());
+//        properties.put("time", new Date());
         mailPool.put(email, properties);
         pool.schedule(new ClearDaemon(email), 5, TimeUnit.SECONDS);
     }
