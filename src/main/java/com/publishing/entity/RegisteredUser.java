@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.Email;
@@ -26,6 +27,7 @@ import javax.validation.constraints.Size;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("registeredUser")
+@NoArgsConstructor
 public class RegisteredUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -68,4 +70,10 @@ public class RegisteredUser implements Serializable {
     private String avatar;
 
 
+    public RegisteredUser(String username, String password, String email, int i) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.status = i;
+    }
 }

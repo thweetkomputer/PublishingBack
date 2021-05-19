@@ -1,4 +1,6 @@
 spring:
+  session:
+    store-type: redis
   datasource:
     username: root
     password: Zcd_13325015108
@@ -20,6 +22,10 @@ spring:
     maxPoolPreparedStatementPerConnectionSize: 20
     useGlobalDataSourceStat: true
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
 #mybatis-plus
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**Mapper.xml
@@ -36,5 +42,6 @@ shiro-redis:
   enabled: true
   redis-manager:
     host: 127.0.0.1:6379
+    database: 0
 server:
   port: 8081
