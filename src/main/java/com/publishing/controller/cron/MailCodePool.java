@@ -20,7 +20,6 @@ public class MailCodePool {
         properties.put("code", code);
         properties.put("time", new Date());
         mailPool.put(email, properties);
-        pool.submit(new ClearDaemon(email));
         pool.schedule(new ClearDaemon(email), 5, TimeUnit.SECONDS);
     }
 
