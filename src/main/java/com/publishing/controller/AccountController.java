@@ -12,19 +12,21 @@ import com.publishing.service.RegisteredUserService;
 import com.publishing.util.JwtUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @RestController
 public class AccountController {
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     @Autowired
     RegisteredUserService userService;
@@ -56,7 +58,9 @@ public class AccountController {
     }
 
     @PostMapping("/signup")
-    public Result signup(@Validated @RequestBody SignupDto signupDto, HttpSession httpSession) {
+    public Result signup(@Validated @RequestBody SignupDto signupDto) {
+
+
         RegisteredUser user = userService.getOne(new QueryWrapper<RegisteredUser>().eq("username", signupDto.getUsername()));
 
         if (user != null) {
@@ -69,10 +73,9 @@ public class AccountController {
 
         System.out.println(signupDto.getCheckCode());
         System.out.println(signupDto.getEmail());
-        System.out.println(httpSession.getAttribute(signupDto.getEmail()));
-        if (!signupDto.getCheckCode().equals(httpSession.getAttribute(signupDto.getEmail()))) {
-            httpSession.removeAttribute(signupDto.getEmail());
-            return Result.fail("验证码错误");
+        System.out.println(redisTemplate.opsForValue().get(signupDto.getEmail()));
+        if (!signupDto.getCheckCode().equals(redisTemplate.opsForValue().get(signupDto.getEmail()))) {
+            return Result.fail("验证码错误或已过期");
         }
         userService.save(new RegisteredUser(signupDto.getUsername(), SecureUtil.md5(signupDto.getPass()), signupDto.getEmail(), 0));
 //        userMapper.addUser(new User(signupDto.getUsername(), SecureUtil.md5(signupDto.getPass()), signupDto.getEmail(), 0));
