@@ -4,6 +4,7 @@ import com.publishing.common.lang.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.ShiroException;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -40,6 +41,14 @@ public class GlobalExceptionHandler {
         return Result.fail(objectError.getDefaultMessage());
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = BindException.class)
+    public Result handler(BindException e ) {
+        log.error("实体校验2异常：----------------{}", e);
+        BindingResult bindingResult = e.getBindingResult();
+        ObjectError objectError = bindingResult.getAllErrors().stream().findFirst().get();
 
+        return Result.fail(objectError.getDefaultMessage());
+    }
 
 }
