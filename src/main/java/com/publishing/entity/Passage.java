@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
@@ -19,6 +20,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+@NoArgsConstructor
 public class Passage implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -40,5 +42,14 @@ public class Passage implements Serializable {
 
     private Integer complaint;
 
+    private Long writerId;
+
+
+
+    public Passage(String title, String description, Long writerId){
+        this.title = title;
+        this.description = description;
+        this.writerId = writerId;
+    }
 
 }

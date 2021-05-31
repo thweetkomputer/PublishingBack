@@ -1,5 +1,6 @@
 package com.publishing.controller;
 
+import com.publishing.common.lang.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,15 +12,15 @@ import java.io.*;
 @Slf4j
 public class DownloadController {
     @RequestMapping("/download")
-    public String downloadFile(@RequestParam("filename") String fileName, HttpServletResponse response) {
+    public Result downloadFile(@RequestParam("filename") String fileName, HttpServletResponse response) {
         String pathname = "/Users/jerryZhao/Desktop/";
         if (fileName != null) {
             //设置文件路径
             File file = new File(pathname+fileName);
             //File file = new File(realPath , fileName);
             if (file.exists()) {
-                response.setContentType("application/force-download");// 设置强制下载不打开
-                response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);// 设置文件名
+//                response.setContentType("application/force-download");// 设置强制下载不打开
+//                response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);// 设置文件名
                 byte[] buffer = new byte[1024];
                 FileInputStream fis = null;
                 BufferedInputStream bis = null;
@@ -32,7 +33,7 @@ public class DownloadController {
                         os.write(buffer, 0, i);
                         i = bis.read(buffer);
                     }
-                    return "下载成功";
+                    return Result.succeed(201, null, null);
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
@@ -53,6 +54,6 @@ public class DownloadController {
                 }
             }
         }
-        return "下载失败";
+        return Result.fail(null);
     }
 }
