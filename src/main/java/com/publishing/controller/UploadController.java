@@ -43,7 +43,7 @@ public class UploadController {
     private TypeService typeService;
 
     @RequestMapping("/upload")
-    public Map<String, Object> upload(@RequestParam("file") MultipartFile file, @RequestParam("filename") String filename) throws IOException {
+    public Map<String, Object> upload(@RequestParam("file") MultipartFile file, @RequestParam("title") String filename) throws IOException {
         Map<String, Object> map = new HashMap<>();
         if (file != null) {  //如果获取到的文件不为空
 
@@ -52,7 +52,7 @@ public class UploadController {
             if (!file_server.getParentFile().exists()) {
                 //如果文件父目录不存在，就创建这样一个目录
                 if (!file_server.getParentFile().mkdirs()) {
-                    ;return (Map<String, Object>) Result.fail("内部错误");
+                    return (Map<String, Object>) Result.fail("内部错误");
                 }
                 System.out.println("创建目录" + file);
             }
@@ -70,25 +70,27 @@ public class UploadController {
     @PostMapping("/submitArticle")
     public Result submitArticle(@Validated SubmitArticleDto dto) throws IOException {
         RegisteredUser author = userService.getOne(new QueryWrapper<RegisteredUser>().eq("username", dto.getAuthor()));
-        if (author == null) {
+        if (author == null || author.getIsWriter() == 0) {
             return Result.fail("不存在该作者");
         }
         Passage passage = passageService.getOne(new QueryWrapper<Passage>().eq("title", dto.getTitle()));
+
         if (passage != null) {
+            System.out.println("文章名是" + passage.getTitle());
             return Result.fail("文章名已存在");
         }
         passageService.save(new Passage(dto.getTitle(), dto.getInfo(), author.getId()));
-        passage =  passageService.getOne(new QueryWrapper<Passage>().eq("title", dto.getTitle()));
+        passage = passageService.getOne(new QueryWrapper<Passage>().eq("title", dto.getTitle()));
         System.out.println(dto.getAuthor());
         System.out.println(dto.getInfo());
         System.out.println(Arrays.toString(dto.getTag()));
         System.out.println(dto.getTitle());
-        upload(dto.getFile(), dto.getTitle());
+//        upload(dto.getFile(), dto.getTitle());
         MultipartFile file = dto.getFile();
-        if (file==null) {
+        if (file == null) {
             return Result.fail("文件为空");
         }
-        File file_server = new File(pathname, dto.getTitle());  //创建文件对象
+        File file_server = new File(pathname, dto.getTitle() + ".pdf");  //创建文件对象
 
         if (!file_server.getParentFile().exists()) {
             //如果文件父目录不存在，就创建这样一个目录

@@ -16,7 +16,7 @@ public class DownloadController {
         String pathname = "/Users/jerryZhao/Desktop/";
         if (fileName != null) {
             //设置文件路径
-            File file = new File(pathname+fileName);
+            File file = new File(pathname + fileName + ".pdf");
             //File file = new File(realPath , fileName);
             if (file.exists()) {
 //                response.setContentType("application/force-download");// 设置强制下载不打开

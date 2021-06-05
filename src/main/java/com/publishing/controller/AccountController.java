@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 @RestController
 public class AccountController {
@@ -45,14 +47,25 @@ public class AccountController {
         String jwt = jwtUtils.generateToken(user.getId());
         response.setHeader("Authorization", jwt);
         response.setHeader("Access-Control-Expose-Headers", "Authorization");
-
-        return Result.succeed(MapUtil.builder()
+        Map<Object, Object> map = MapUtil.builder()
                 .put("username", user.getUsername())
-                .put("password", user.getPassword())
                 .put("email", user.getEmail())
                 .put("avatar", user.getAvatar())
-                .map()
-        );
+                .put("gender", user.getGender())
+                .put("phone", user.getPhone())
+                .put("description", user.getDescription())
+                .put("birth", user.getBirth())
+                .put("isVip", user.getIsVip())
+                .map();
+        // 作者是1， 审稿人是2， 编辑是3
+        if (user.getIsWriter() == 1) {
+            map.put("identity", 1);
+        } else if (user.getIsReviewer() == 1) {
+            map.put("identity", 2);
+        } else if (user.getIsEdit() == 1) {
+            map.put("identity", 3);
+        }
+        return Result.succeed(map);
     }
 
     @PostMapping("/signup")
