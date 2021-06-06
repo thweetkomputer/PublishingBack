@@ -65,7 +65,7 @@ public class AccountController {
         } else if (user.getIsEdit() == 1) {
             map.put("identity", 3);
         }
-        return Result.succeed(map);
+        return Result.succeed(200, "登录成功", map);
     }
 
     @PostMapping("/signup")
@@ -91,7 +91,7 @@ public class AccountController {
         userService.save(new RegisteredUser(signupDto.getUsername(), SecureUtil.md5(signupDto.getPass()), signupDto.getEmail(), 0));
 //        userMapper.addUser(new User(signupDto.getUsername(), SecureUtil.md5(signupDto.getPass()), signupDto.getEmail(), 0));
 
-        return Result.succeed(MapUtil.builder()
+        return Result.succeed(200, "注册成功，请重新登录！", MapUtil.builder()
                 .put("username", signupDto.getUsername())
                 .put("result", "注册成功")
                 .put("email", signupDto.getEmail())

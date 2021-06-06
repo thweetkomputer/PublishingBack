@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.*;
 public class SearchController {
 
     @Autowired
-    private PassageService passageService;
-
-    @Autowired
     private PassageMapper passageMapper;
 
     @RequestMapping("/newPassages")

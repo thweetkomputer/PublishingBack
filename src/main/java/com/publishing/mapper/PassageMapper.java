@@ -20,5 +20,5 @@ public interface PassageMapper extends BaseMapper<Passage> {
     // 分页查询
     List<Passage> selectByPage(Integer startPage, Integer endPage);
     // 查询文章总数
-    Integer selectCount();
+    Long selectCount();
 }
