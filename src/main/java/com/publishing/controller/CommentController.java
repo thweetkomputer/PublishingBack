@@ -36,13 +36,16 @@ public class CommentController {
     private CommentMapper commentMapper;
 
     @Autowired
+    private CommentService commentService;
+
+    @Autowired
     private PassageService passageService;
 
     @Autowired
     private RegisteredUserService userService;
 
     @RequestMapping("/getComment")
-    public Result newPassages(@RequestParam("page") Long page,
+    public Result getComment(@RequestParam("page") Long page,
                               @RequestParam("pageSize") Long pageSize,
                               @RequestParam("article_id") String articleName) {
 //        System.out.println(page + " " + pageSize);
@@ -56,5 +59,13 @@ public class CommentController {
                 .put("comment_list", commentList)
                 .put("total_num", commentMapper.selectCount())
                 .map());
+    }
+
+    @RequestMapping("/addComment")
+    public Result addComment(@RequestParam("article_id") String articleName,
+                             @RequestParam("text") String content,
+                             @RequestParam("user_id") Long userId) {
+        commentService.save(new Comment(userId, passageService.getOne(new QueryWrapper<Passage>().eq("title", articleName)).getId(), content));
+        return Result.succeed(200, "评论成功！", null);
     }
 }

@@ -48,6 +48,7 @@ public class AccountController {
         response.setHeader("Authorization", jwt);
         response.setHeader("Access-Control-Expose-Headers", "Authorization");
         Map<Object, Object> map = MapUtil.builder()
+                .put("id", user.getId())
                 .put("username", user.getUsername())
                 .put("email", user.getEmail())
                 .put("avatar", user.getAvatar())
