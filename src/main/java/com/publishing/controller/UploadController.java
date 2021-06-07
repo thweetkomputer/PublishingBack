@@ -73,14 +73,14 @@ public class UploadController {
         if (author == null || author.getIsWriter() == 0) {
             return Result.fail("不存在该作者");
         }
-        Passage passage = passageService.getOne(new QueryWrapper<Passage>().eq("title", dto.getTitle()));
-
-        if (passage != null) {
-            System.out.println("文章名是" + passage.getTitle());
-            return Result.fail("文章名已存在");
-        }
-        passageService.save(new Passage(dto.getTitle(), dto.getInfo(), author.getId()));
-        passage = passageService.getOne(new QueryWrapper<Passage>().eq("title", dto.getTitle()));
+//        Passage passage = passageService.getOne(new QueryWrapper<Passage>().eq("title", dto.getTitle()));
+//
+//        if (passage != null) {
+//            System.out.println("文章名是" + passage.getTitle());
+//            return Result.fail("文章名已存在");
+//        }
+        Passage newPassage = new Passage(dto.getTitle(), dto.getInfo(), author.getId());
+        passageService.save(newPassage);
         System.out.println(dto.getAuthor());
         System.out.println(dto.getInfo());
         System.out.println(Arrays.toString(dto.getTag()));
@@ -90,7 +90,7 @@ public class UploadController {
         if (file == null) {
             return Result.fail("文件为空");
         }
-        File file_server = new File(pathname, dto.getTitle() + ".pdf");  //创建文件对象
+        File file_server = new File(pathname, newPassage.getId() + ".pdf");  //创建文件对象
 
         if (!file_server.getParentFile().exists()) {
             //如果文件父目录不存在，就创建这样一个目录
@@ -99,7 +99,7 @@ public class UploadController {
             }
         }
         for (String s : dto.getTag()) {
-            typeService.save(new Type(passage.getId(), s));
+            typeService.save(new Type(newPassage.getId(), s));
         }
         file.transferTo(file_server);
         return Result.succeed(200, "上传成功", null);
