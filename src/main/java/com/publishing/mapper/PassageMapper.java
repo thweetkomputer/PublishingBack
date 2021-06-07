@@ -28,10 +28,15 @@ public interface PassageMapper extends BaseMapper<Passage> {
     // 查询已审阅的未出版的文章的总数
     Long selectCountReviewedUnpublished();
 
-    // 查询已审阅的未出版的文章
+    // 查询未分配审稿人的文章
     List<Passage> selectUnreviewedByPage(Integer startPage, Integer endPage);
 
-    // 查询已审阅的未出版的文章的总数
+    // 查询未分配审稿人的文章的总数
     Long selectCountUnreviewed();
 
+    // 查询某个审稿人需要审阅的文章
+    List<Passage> selectDistributedUnreviewedByPage(Long startPage, Long pageSize, Long reviewer_id);
+
+    //查询某个审稿人需要审阅的文章的总数
+    Long selectCountDistributedUnreviewed();
 }
