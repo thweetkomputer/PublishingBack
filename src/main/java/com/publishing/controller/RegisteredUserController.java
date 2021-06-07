@@ -1,6 +1,7 @@
 package com.publishing.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.publishing.common.lang.Result;
 import com.publishing.entity.RegisteredUser;
 import com.publishing.service.RegisteredUserService;
@@ -33,8 +34,8 @@ public class RegisteredUserController {
         return Result.succeed(user);
     }
 
-//    @PostMapping("/getReviewer")
-//    public Object getReviewer () {
-//        return
-//    }
+    @PostMapping("/getReviewer")
+    public Object getReviewer () {
+        return Result.succeed(userService.list(null));
+    }
 }

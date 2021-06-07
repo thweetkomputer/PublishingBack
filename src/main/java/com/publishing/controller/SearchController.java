@@ -38,4 +38,14 @@ public class SearchController {
         .put("total_num", passageMapper.selectCountReviewedUnpublished())
         .map());
     }
+
+    @RequestMapping("/getPassageUnreviewed")
+    public Result getPassageUnreviewed(@RequestParam("page") int page, @RequestParam("pageSize") int pageSize) {
+        int startPage = (page - 1) * pageSize;
+        return Result.succeed(MapUtil.builder()
+                .put("article_list", passageMapper.selectUnreviewedByPage(startPage, pageSize))
+                .put("total_num", passageMapper.selectCountUnreviewed())
+                .map());
+    }
+
 }
