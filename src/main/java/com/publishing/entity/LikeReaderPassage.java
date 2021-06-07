@@ -15,15 +15,15 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author JerryZhao
- * @since 2021-05-09
+ * @since 2021-06-07
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("favorReaderPassage")
+@TableName("likeReaderPassage")
 @NoArgsConstructor
 @AllArgsConstructor
-public class FavorReaderPassage implements Serializable {
+public class LikeReaderPassage implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

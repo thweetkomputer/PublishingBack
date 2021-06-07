@@ -1,8 +1,12 @@
 package com.publishing.controller;
 
 
+import com.publishing.common.lang.Result;
+import com.publishing.service.FavorReaderCommentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -14,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-05-09
  */
 @RestController
-@RequestMapping("/favor-reader-comment")
 public class FavorReaderCommentController {
+
 
 }

@@ -50,14 +50,15 @@ public class CommentController {
                               @RequestParam("article_id") String articleName) {
 //        System.out.println(page + " " + pageSize);
         Long startPage = (page - 1) * pageSize;
+        Long passageId = passageService.getOne(new QueryWrapper<Passage>().eq("title", articleName)).getId();
 //        int endPage = page * pageSize;
-        List<Comment> commentList = commentMapper.selectByPage(startPage, pageSize, passageService.getOne(new QueryWrapper<Passage>().eq("title", articleName)).getId());
+        List<Comment> commentList = commentMapper.selectByPage(startPage, pageSize, passageId);
         for (Comment c : commentList) {
             c.setContent(userService.getOne(new QueryWrapper<RegisteredUser>().eq("id", c.getWriterId())).getUsername()+" "+c.getContent());
         }
         return Result.succeed(201, "", MapUtil.builder()
                 .put("comment_list", commentList)
-                .put("total_num", commentMapper.selectCount())
+                .put("total_num", commentMapper.selectList(new QueryWrapper<Comment>().eq("passage_id", passageId)).size())
                 .map());
     }
 

@@ -1,6 +1,6 @@
 package com.publishing.mapper;
 
-import com.publishing.entity.FavorReaderPassage;
+import com.publishing.entity.LikeReaderPassage;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
 
@@ -10,9 +10,10 @@ import org.springframework.stereotype.Repository;
  * </p>
  *
  * @author JerryZhao
- * @since 2021-05-09
+ * @since 2021-06-07
  */
+
 @Repository
-public interface FavorReaderPassageMapper extends BaseMapper<FavorReaderPassage> {
+public interface LikeReaderPassageMapper extends BaseMapper<LikeReaderPassage> {
 
 }
