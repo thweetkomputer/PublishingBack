@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
  * @since 2021-05-09
  */
 @RestController
-@RequestMapping("/registered-user")
 public class RegisteredUserController {
     @Autowired
     RegisteredUserService userService;
@@ -32,6 +31,10 @@ public class RegisteredUserController {
     @PostMapping("/save")
     public Result save(@Validated @RequestBody RegisteredUser user) {
         return Result.succeed(user);
-
     }
+
+//    @PostMapping("/getReviewer")
+//    public Object getReviewer () {
+//        return
+//    }
 }

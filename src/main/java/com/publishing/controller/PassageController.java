@@ -1,6 +1,7 @@
 package com.publishing.controller;
 
 
+import cn.hutool.core.map.MapUtil;
 import com.publishing.common.lang.Result;
 import com.publishing.service.PassageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,10 +33,12 @@ public class PassageController {
     private String pathname;
 
     @RequestMapping("/getPassage")
-    public Result getPassage() throws IOException {
+    public Result getPassage(@RequestParam("article_title") Long id) throws IOException {
         File file = new File(pathname + "xuqiuguigeshuomingshu.pdf");
         FileInputStream inputStream = new FileInputStream(file);
-//        return Result.succeed(201, "", JSONUtil.(new MockMultipartFile(file.getName(), file.getName(), "multipart/form-data", inputStream).getBytes()));
-        return null;
+        return Result.succeed(MapUtil.builder()
+        .put("description", passageService.getById(id).getDescription())
+        .put("title", passageService.getById(id).getTitle())
+        .map());
     }
 }

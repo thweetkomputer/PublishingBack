@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.*;
 public class SearchController {
 
     @Autowired
-    private PassageService passageService;
-
-    @Autowired
     private PassageMapper passageMapper;
 
     @RequestMapping("/newPassages")
@@ -22,14 +19,23 @@ public class SearchController {
         System.out.println(page + " " + pageSize);
         int startPage = (page - 1) * pageSize;
 //        int endPage = page * pageSize;
-        return Result.succeed(201, "", MapUtil.builder()
+        return Result.succeed(MapUtil.builder()
                 .put("article_list", passageMapper.selectByPage(startPage, pageSize))
                 .put("total_num", passageMapper.selectCount())
                 .map());
     }
 
-    @RequestMapping("/countPassages")
-    public Result countPassages() {
-        return Result.succeed(201, "", passageMapper.selectCount());
+//    @RequestMapping("/countPassages")
+//    public Result countPassages() {
+//        return Result.succeed(201, "", passageMapper.selectCount());
+//    }
+
+    @RequestMapping("/getPassageReviewedUnpublished")
+    public Result getPassageReviewedUnpublished(@RequestParam("page") int page, @RequestParam("pageSize") int pageSize) {
+        int startPage = (page - 1) * pageSize;
+        return Result.succeed(MapUtil.builder()
+        .put("article_list", passageMapper.selectReviewedUnpublishedByPage(startPage, pageSize))
+        .put("total_num", passageMapper.selectCountReviewedUnpublished())
+        .map());
     }
 }
