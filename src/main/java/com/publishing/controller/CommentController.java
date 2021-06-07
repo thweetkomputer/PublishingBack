@@ -47,10 +47,9 @@ public class CommentController {
     @RequestMapping("/getComment")
     public Result getComment(@RequestParam("page") Long page,
                               @RequestParam("pageSize") Long pageSize,
-                              @RequestParam("article_id") String articleName) {
+                              @RequestParam("article_id") Long passageId) {
 //        System.out.println(page + " " + pageSize);
         Long startPage = (page - 1) * pageSize;
-        Long passageId = passageService.getOne(new QueryWrapper<Passage>().eq("title", articleName)).getId();
 //        int endPage = page * pageSize;
         List<Comment> commentList = commentMapper.selectByPage(startPage, pageSize, passageId);
         for (Comment c : commentList) {
@@ -63,10 +62,10 @@ public class CommentController {
     }
 
     @RequestMapping("/addComment")
-    public Result addComment(@RequestParam("article_id") String articleName,
+    public Result addComment(@RequestParam("article_id") Long passageId,
                              @RequestParam("text") String content,
                              @RequestParam("user_id") Long userId) {
-        commentService.save(new Comment(userId, passageService.getOne(new QueryWrapper<Passage>().eq("title", articleName)).getId(), content));
+        commentService.save(new Comment(userId, passageId, content));
         return Result.succeed(200, "评论成功！", null);
     }
 }

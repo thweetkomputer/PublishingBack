@@ -12,11 +12,11 @@ import java.io.*;
 @Slf4j
 public class DownloadController {
     @RequestMapping("/download")
-    public Result downloadFile(@RequestParam("filename") String fileName, HttpServletResponse response) {
+    public Result downloadFile(@RequestParam("filename") Long passageId, HttpServletResponse response) {
         String pathname = "/Users/jerryZhao/Desktop/";
-        if (fileName != null) {
+        if (passageId != null) {
             //设置文件路径
-            File file = new File(pathname + fileName + ".pdf");
+            File file = new File(pathname + passageId + ".pdf");
             //File file = new File(realPath , fileName);
             if (file.exists()) {
 //                response.setContentType("application/force-download");// 设置强制下载不打开

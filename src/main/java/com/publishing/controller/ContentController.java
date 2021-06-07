@@ -43,9 +43,7 @@ public class ContentController {
     }
 
     @RequestMapping("/getUserToArticle")
-    public Result getUserToPassage(@RequestParam("user_id") Long readerId, @RequestParam("article_id") String title) {
-
-        Long passageId = getPassageIdByTitle(title);
+    public Result getUserToPassage(@RequestParam("user_id") Long readerId, @RequestParam("article_id") Long passageId) {
 
         return Result.succeed(MapUtil.builder()
                 .put("favor", favorReaderPassageMapper.selectList(new QueryWrapper<FavorReaderPassage>().eq("reader_id", readerId).eq("passage_id", passageId)).size() != 0 ? 1 : 0)
@@ -54,40 +52,36 @@ public class ContentController {
     }
 
     @RequestMapping("/likeArticle")
-    public Result likeArticle(@RequestParam("user_id") Long readerId, @RequestParam("article_id") String title) {
+    public Result likeArticle(@RequestParam("user_id") Long readerId, @RequestParam("article_id") Long passageId) {
 
-        Long passageId = getPassageIdByTitle(title);
         likeReaderPassageMapper.insert(new LikeReaderPassage(readerId, passageId));
         return Result.succeed(200, "点赞成功", MapUtil.builder().put("like", 1).map());
     }
 
     @RequestMapping("/favorArticle")
-    public Result favorArticle(@RequestParam("user_id") Long readerId, @RequestParam("article_id") String title) {
+    public Result favorArticle(@RequestParam("user_id") Long readerId, @RequestParam("article_id") Long passageId) {
 
-        Long passageId = getPassageIdByTitle(title);
         favorReaderPassageMapper.insert(new FavorReaderPassage(readerId, passageId));
         return Result.succeed(200, "收藏成功", MapUtil.builder().put("favor", 1).map());
     }
 
     @RequestMapping("/cancelLikeArticle")
-    public Result cancelLikeArticle(@RequestParam("user_id") Long readerId, @RequestParam("article_id") String title) {
+    public Result cancelLikeArticle(@RequestParam("user_id") Long readerId, @RequestParam("article_id") Long passageId) {
 
-        Long passageId = getPassageIdByTitle(title);
         likeReaderPassageMapper.delete(new QueryWrapper<LikeReaderPassage>().eq("reader_id", readerId).eq("passage_id", passageId));
         return Result.succeed(200, "取消点赞成功", MapUtil.builder().put("like", 0).map());
     }
 
     @RequestMapping("/cancelFavorArticle")
-    public Result cancelFavorArticle(@RequestParam("user_id") Long readerId, @RequestParam("article_id") String title) {
+    public Result cancelFavorArticle(@RequestParam("user_id") Long readerId, @RequestParam("article_id") Long passageId) {
 
-        Long passageId = getPassageIdByTitle(title);
         favorReaderPassageMapper.delete(new QueryWrapper<FavorReaderPassage>().eq("reader_id", readerId).eq("passage_id", passageId));
         return Result.succeed(200, "取消收藏成功", MapUtil.builder().put("favor", 0).map());
     }
 
     @RequestMapping("/submitComplaint")
-    public Result submitComplaint(@RequestParam("user_id") Long readerId, @RequestParam("article_id") String title, @RequestParam("report_message") String content) {
-        noticeService.save(new Notice(1L, "文章Id为"+getPassageIdByTitle(title)+",题目为 " + title + " 的文章被举报，举报信息为\n  "+content));
+    public Result submitComplaint(@RequestParam("user_id") Long readerId, @RequestParam("article_id") Long passageId, @RequestParam("report_message") String content) {
+        noticeService.save(new Notice(1L, "文章Id为"+passageId+",题目为 " + passageService.getById(passageId).getTitle() + " 的文章被举报，举报信息为\n  "+content));
         return Result.succeed(200, "举报成功，信息已发送给编辑！", null);
     }
 }
