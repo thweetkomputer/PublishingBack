@@ -16,10 +16,7 @@ import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
@@ -132,6 +129,37 @@ public class AccountController {
                 .map()
         );
 
+    }
+
+    @PostMapping("/editInfo")
+    public Result editInfo(@RequestParam("description") String description, @RequestParam("user_id") Long userId) {
+        RegisteredUser user = userService.getById(userId);
+        user.setDescription(description);
+        try {
+            userService.updateById(user);
+        } catch (Exception e) {
+            return Result.fail("简介内容过长");
+        }
+        Map<Object, Object> map = MapUtil.builder()
+                .put("id", user.getId())
+                .put("username", user.getUsername())
+                .put("email", user.getEmail())
+                .put("avatar", user.getAvatar())
+                .put("gender", user.getGender())
+                .put("phone", user.getPhone())
+                .put("description", user.getDescription())
+                .put("birth", user.getBirth())
+                .put("isVip", user.getIsVip())
+                .map();
+        // 作者是1， 审稿人是2， 编辑是3
+        if (user.getIsWriter() == 1) {
+            map.put("identity", 1);
+        } else if (user.getIsReviewer() == 1) {
+            map.put("identity", 2);
+        } else if (user.getIsEdit() == 1) {
+            map.put("identity", 3);
+        }
+        return Result.succeed(200, "修改成功", map);
     }
 
     @RequiresAuthentication
