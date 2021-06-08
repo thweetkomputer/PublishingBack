@@ -36,6 +36,6 @@ public class RegisteredUserController {
 
     @PostMapping("/getReviewer")
     public Object getReviewer () {
-        return Result.succeed(userService.list(null));
+        return Result.succeed(userService.list(new QueryWrapper<RegisteredUser>().eq("is_reviewer", 1)));
     }
 }

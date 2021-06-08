@@ -42,9 +42,9 @@ public class Passage implements Serializable {
 
     private Integer complaint;
 
+    private Integer distributed;
+
     private Long writerId;
-
-
 
     public Passage(String title, String description, Long writerId){
         this.title = title;
