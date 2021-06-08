@@ -98,8 +98,11 @@ public class UploadController {
                 return Result.fail("内部错误");
             }
         }
-        for (String s : dto.getTag()) {
-            typeService.save(new Type(newPassage.getId(), s));
+        String[] tag = dto.getTag();
+        tag[0] = tag[0].substring(1);
+        tag[tag.length - 1] = tag[tag.length - 1].substring(0, tag[tag.length - 1].length() - 1);
+        for (String s : tag) {
+            typeService.save(new Type(newPassage.getId(), s.substring(1, s.length()-1)));
         }
         file.transferTo(file_server);
         return Result.succeed(200, "上传成功", null);
