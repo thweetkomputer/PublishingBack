@@ -2,9 +2,11 @@ package com.publishing.controller;
 
 
 import com.publishing.common.lang.Result;
+import com.publishing.entity.Notice;
 import com.publishing.entity.Passage;
 import com.publishing.entity.Review;
 import com.publishing.mapper.PassageMapper;
+import com.publishing.service.NoticeService;
 import com.publishing.service.PassageService;
 import com.publishing.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ public class ReviewController {
     @Autowired
     private ReviewService reviewService;
 
+    @Autowired
+    private NoticeService noticeService;
+
     @RequestMapping("/distributePassage")
     public Result distributePassage(@RequestParam("article_id") Long passageId,
                                     @RequestParam("reviewer_id1") Long reviewerId1,
@@ -47,8 +52,11 @@ public class ReviewController {
         passage.setDistributed(1);
         passageMapper.updateById(passage);
         reviewService.save(new Review(reviewerId1, passageId));
+        noticeService.save(new Notice(reviewerId1, "您有新的待审阅文章，文章Id为+"+passageId+"，标题为《"+passage.getTitle()+"》."));
         reviewService.save(new Review(reviewerId2, passageId));
+        noticeService.save(new Notice(reviewerId2, "您有新的待审阅文章，文章Id为+"+passageId+"，标题为《"+passage.getTitle()+"》."));
         reviewService.save(new Review(reviewerId3, passageId));
+        noticeService.save(new Notice(reviewerId3, "您有新的待审阅文章，文章Id为+"+passageId+"，标题为《"+passage.getTitle()+"》."));
 
         return Result.succeed(200, "分配成功", null);
     }
