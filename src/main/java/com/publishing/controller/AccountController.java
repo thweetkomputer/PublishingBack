@@ -4,6 +4,7 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.publishing.common.dto.ChangePassDto;
 import com.publishing.common.dto.LoginDto;
 import com.publishing.common.dto.SignupDto;
 import com.publishing.common.lang.Result;
@@ -96,6 +97,38 @@ public class AccountController {
                 .put("username", signupDto.getUsername())
                 .put("result", "注册成功")
                 .put("email", signupDto.getEmail())
+                .map()
+        );
+
+    }
+
+    @PostMapping("/changePass")
+    public Result changePassword(@Validated @RequestBody ChangePassDto ChangePassDto) {
+
+
+        RegisteredUser user = userService.getOne(new QueryWrapper<RegisteredUser>().eq("username", ChangePassDto.getUsername()).eq("email", ChangePassDto.getEmail()));
+
+        if (user == null) {
+            return Result.fail("用户名不存在或邮箱错误");
+        }
+
+        if (!ChangePassDto.getPass().equals(ChangePassDto.getCheckPass())) {
+            return Result.fail("两次密码不相同");
+        }
+
+        System.out.println(ChangePassDto.getCheckCode());
+        System.out.println(ChangePassDto.getEmail());
+        System.out.println(redisTemplate.opsForValue().get(ChangePassDto.getEmail()));
+        if (!ChangePassDto.getCheckCode().equals(redisTemplate.opsForValue().get(ChangePassDto.getEmail()))) {
+            return Result.fail("验证码错误或已过期");
+        }
+        userService.updateById(user.setPassword(SecureUtil.md5(ChangePassDto.getPass())));
+//        userMapper.addUser(new User(signupDto.getUsername(), SecureUtil.md5(signupDto.getPass()), signupDto.getEmail(), 0));
+
+        return Result.succeed(200, "修改成功，请重新登录！", MapUtil.builder()
+                .put("username", ChangePassDto.getUsername())
+                .put("result", "修改成功")
+                .put("email", ChangePassDto.getEmail())
                 .map()
         );
 
