@@ -52,6 +52,7 @@ public class SearchController {
 //        return Result.succeed(201, "", passageMapper.selectCount());
 //    }
 
+    // 取得已审阅但是未发布的文章
     @RequestMapping("/getPassageReviewedUnpublished")
     public Result getPassageReviewedUnpublished(@RequestParam("page") int page,
                                                 @RequestParam("pageSize") int pageSize) {
@@ -62,6 +63,7 @@ public class SearchController {
                 .map());
     }
 
+    // 获得没审阅的文章
     @RequestMapping("/getPassageUnreviewed")
     public Result getPassageUnreviewed(@RequestParam("page") int page,
                                        @RequestParam("pageSize") int pageSize) {
@@ -72,14 +74,16 @@ public class SearchController {
                 .map());
     }
 
+    // 返回审稿人未审阅的文章
     @RequestMapping("/getPassageDistributedUnreviewed")
     public Result getPassageDistributedUnreviewed(@RequestParam("page") int page,
-                                                  @RequestParam("pageSize") int pageSize, @RequestParam("reviewer_id") Long reviewerId) {
+                                                  @RequestParam("pageSize") int pageSize,
+                                                  @RequestParam("reviewer_id") Long reviewerId) {
         int startPage = (page - 1) * pageSize;
         List<Passage> passageList = new ArrayList<>();
-        List<Review> reviewList = reviewService.list(new QueryWrapper<Review>().eq("reviewer_id", reviewerId));
+        List<Review> reviewList = reviewService.list(new QueryWrapper<Review>().eq("reviewer_id", reviewerId).eq("done", 0));
         for (Review review : reviewList) {
-            Passage one = passageService.getOne(new QueryWrapper<Passage>().eq("id", review.getPassageId()).eq("unreviewed", 1));
+            Passage one = passageService.getById(review.getPassageId());
             if (one != null) {
                 passageList.add(one);
             }
@@ -90,15 +94,16 @@ public class SearchController {
                 .map());
     }
 
+    // 返回审稿人已审阅的文章
     @RequestMapping("/getPassageDistributedReviewed")
     public Result getPassageDistributedReviewed(@RequestParam("page") int page,
                                                 @RequestParam("pageSize") int pageSize,
                                                 @RequestParam("reviewer_id") Long reviewerId) {
         int startPage = (page - 1) * pageSize;
         List<Passage> passageList = new ArrayList<>();
-        List<Review> reviewList = reviewService.list(new QueryWrapper<Review>().eq("reviewer_id", reviewerId));
+        List<Review> reviewList = reviewService.list(new QueryWrapper<Review>().eq("reviewer_id", reviewerId).eq("done", 1));
         for (Review review : reviewList) {
-            Passage one = passageService.getOne(new QueryWrapper<Passage>().eq("id", review.getPassageId()).eq("unreviewed", 0));
+            Passage one = passageService.getById(review.getPassageId());
             if (one != null) {
                 passageList.add(one);
             }

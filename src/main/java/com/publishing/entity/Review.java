@@ -29,5 +29,10 @@ public class Review implements Serializable {
 
     private Long passageId;
 
+    private Integer done;
 
+    public Review(Long reviewerId, Long passageId) {
+        this.reviewerId = reviewerId;
+        this.passageId = passageId;
+    }
 }
