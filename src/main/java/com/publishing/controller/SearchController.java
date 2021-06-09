@@ -41,8 +41,12 @@ public class SearchController {
         System.out.println(page + " " + pageSize);
         int startPage = (page - 1) * pageSize;
 //        int endPage = page * pageSize;
+        List<Passage> passageList = passageMapper.selectByPage(startPage, pageSize);
+        for (Passage p : passageList) {
+            p.setType(userService.getById(p.getWriterId()).getUsername());
+        }
         return Result.succeed(MapUtil.builder()
-                .put("article_list", passageMapper.selectByPage(startPage, pageSize))
+                .put("article_list", passageList)
                 .put("total_num", passageMapper.selectCount())
                 .map());
     }
@@ -57,8 +61,12 @@ public class SearchController {
     public Result getPassageReviewedUnpublished(@RequestParam("page") int page,
                                                 @RequestParam("pageSize") int pageSize) {
         int startPage = (page - 1) * pageSize;
+        List<Passage> passageList = passageMapper.selectReviewedUnpublishedByPage(startPage, pageSize);
+        for (Passage p : passageList) {
+            p.setType(userService.getById(p.getWriterId()).getUsername());
+        }
         return Result.succeed(MapUtil.builder()
-                .put("article_list", passageMapper.selectReviewedUnpublishedByPage(startPage, pageSize))
+                .put("article_list", passageList)
                 .put("total_num", passageMapper.selectCountReviewedUnpublished())
                 .map());
     }
@@ -68,8 +76,12 @@ public class SearchController {
     public Result getPassageUnreviewed(@RequestParam("page") int page,
                                        @RequestParam("pageSize") int pageSize) {
         int startPage = (page - 1) * pageSize;
+        List<Passage> passageList = passageMapper.selectUnreviewedByPage(startPage, pageSize);
+        for (Passage p : passageList) {
+            p.setType(userService.getById(p.getWriterId()).getUsername());
+        }
         return Result.succeed(MapUtil.builder()
-                .put("article_list", passageMapper.selectUnreviewedByPage(startPage, pageSize))
+                .put("article_list", passageList)
                 .put("total_num", passageMapper.selectCountUnreviewed())
                 .map());
     }
@@ -87,6 +99,9 @@ public class SearchController {
             if (one != null) {
                 passageList.add(one);
             }
+        }
+        for (Passage p : passageList) {
+            p.setType(userService.getById(p.getWriterId()).getUsername());
         }
         return Result.succeed(MapUtil.builder()
                 .put("article_list", passageList.subList(startPage, Math.min(startPage + pageSize, passageList.size())))
@@ -108,6 +123,9 @@ public class SearchController {
                 passageList.add(one);
             }
         }
+        for (Passage p : passageList) {
+            p.setType(userService.getById(p.getWriterId()).getUsername());
+        }
         return Result.succeed(MapUtil.builder()
                 .put("article_list", passageList.subList(startPage, Math.min(startPage + pageSize, passageList.size())))
                 .put("total_num", passageList.size())
@@ -120,7 +138,9 @@ public class SearchController {
                                  @RequestParam("input") String writerName) {
         int startPage = (page - 1) * pageSize;
         List<Passage> passageList = passageService.list(new QueryWrapper<Passage>().eq("writer_id", userService.getOne(new QueryWrapper<RegisteredUser>().eq("username", writerName)).getId()).eq("published", 1));
-
+        for (Passage p : passageList) {
+            p.setType(userService.getById(p.getWriterId()).getUsername());
+        }
         return Result.succeed(MapUtil.builder()
                 .put("article_list", passageList.subList(startPage, Math.min(startPage + pageSize, passageList.size())))
                 .put("total_num", passageList.size())
@@ -133,6 +153,9 @@ public class SearchController {
                                   @RequestParam("input") String keyword) {
         int startPage = (page - 1) * pageSize;
         List<Passage> passageList = passageService.list(new QueryWrapper<Passage>().like("title", "%" + keyword + "%").eq("published", 1));
+        for (Passage p : passageList) {
+            p.setType(userService.getById(p.getWriterId()).getUsername());
+        }
         return Result.succeed(MapUtil.builder()
                 .put("article_list", passageList.subList(startPage, Math.min(startPage + pageSize, passageList.size())))
                 .put("total_num", passageList.size())
@@ -162,6 +185,9 @@ public class SearchController {
         for (Long l : passageIdSet) {
             passageList.add(passageService.getById(l));
         }
+        for (Passage p : passageList) {
+            p.setType(userService.getById(p.getWriterId()).getUsername());
+        }
         return Result.succeed(MapUtil.builder()
                 .put("article_list", passageList.subList(startPage, Math.min(startPage + pageSize, passageList.size())))
                 .put("total_num", passageList.size())
@@ -177,6 +203,24 @@ public class SearchController {
         List<FavorReaderPassage> favorReaderPassages = favorReaderPassageService.list(new QueryWrapper<FavorReaderPassage>().eq("reader_id", userId));
         for (FavorReaderPassage f : favorReaderPassages) {
             passageList.add(passageService.getById(f.getPassageId()));
+        }
+        for (Passage p : passageList) {
+            p.setType(userService.getById(p.getWriterId()).getUsername());
+        }
+        return Result.succeed(MapUtil.builder()
+                .put("article_list", passageList.subList(startPage, Math.min(startPage + pageSize, passageList.size())))
+                .put("total_num", passageList.size())
+                .map());
+    }
+
+    @RequestMapping("/searchMyArticle")
+    public Result searchMyArticle(@RequestParam("page") int page,
+                                     @RequestParam("pageSize") int pageSize,
+                                     @RequestParam("user_id") int userId) {
+        int startPage = (page - 1) * pageSize;
+        List<Passage> passageList = passageService.list(new QueryWrapper<Passage>().eq("writer_id", userId));
+        for (Passage p : passageList) {
+            p.setType(userService.getById(p.getWriterId()).getUsername());
         }
         return Result.succeed(MapUtil.builder()
                 .put("article_list", passageList.subList(startPage, Math.min(startPage + pageSize, passageList.size())))

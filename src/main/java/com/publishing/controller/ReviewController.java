@@ -57,11 +57,11 @@ public class ReviewController {
         passage.setDistributed(1);
         passageMapper.updateById(passage);
         reviewService.save(new Review(reviewerId1, passageId));
-        noticeService.save(new Notice(reviewerId1, "您有新的待审阅文章，文章Id为+" + passageId + "，标题为《" + passage.getTitle() + "》."));
+        noticeService.save(new Notice(reviewerId1, "您有新的待审阅文章，文章Id为" + passageId + "，标题为《" + passage.getTitle() + "》."));
         reviewService.save(new Review(reviewerId2, passageId));
-        noticeService.save(new Notice(reviewerId2, "您有新的待审阅文章，文章Id为+" + passageId + "，标题为《" + passage.getTitle() + "》."));
+        noticeService.save(new Notice(reviewerId2, "您有新的待审阅文章，文章Id为" + passageId + "，标题为《" + passage.getTitle() + "》."));
         reviewService.save(new Review(reviewerId3, passageId));
-        noticeService.save(new Notice(reviewerId3, "您有新的待审阅文章，文章Id为+" + passageId + "，标题为《" + passage.getTitle() + "》."));
+        noticeService.save(new Notice(reviewerId3, "您有新的待审阅文章，文章Id为" + passageId + "，标题为《" + passage.getTitle() + "》."));
 
         return Result.succeed(200, "分配成功", null);
     }
