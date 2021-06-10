@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -35,6 +36,7 @@ public class NoticeController {
         List<Notice> noticeList = noticeService.list(new QueryWrapper<Notice>().eq("receiver_id", userId));
         Collections.reverse(noticeList);
         int startPage = (page - 1) * pageSize;
+        noticeList.sort(Comparator.comparingInt(Notice::getHasRead));
         return Result.succeed(MapUtil.builder()
                 .put("notice_list", noticeList.subList(startPage, Math.min(startPage + pageSize, noticeList.size())))
                 .put("total_num", noticeList.size())

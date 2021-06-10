@@ -28,7 +28,7 @@
     <select id="selectCountReviewedUnpublished" resultType="Long">
         SELECT COUNT(*)
         FROM passage
-        WHERE published = 1
+        WHERE published = 0
           AND unreviewed = 0
     </select>
 

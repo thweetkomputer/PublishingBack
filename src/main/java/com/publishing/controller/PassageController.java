@@ -44,8 +44,13 @@ public class PassageController {
 
     @RequestMapping("/getPassage")
     public Result getPassage(@RequestParam("article_title") Long id) throws IOException {
-        File file = new File(pathname + id + ".pdf");
-        FileInputStream inputStream = new FileInputStream(file);
+        try {
+            File file = new File(pathname + id + ".pdf");
+            FileInputStream inputStream = new FileInputStream(file);
+        } catch (Exception e ) {
+            e.printStackTrace();
+            return Result.fail("文章不存在");
+        }
         return Result.succeed(MapUtil.builder()
                 .put("description", passageService.getById(id).getDescription())
                 .put("title", passageService.getById(id).getTitle())
