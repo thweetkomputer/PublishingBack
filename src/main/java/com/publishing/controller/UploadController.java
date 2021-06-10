@@ -3,10 +3,12 @@ package com.publishing.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.publishing.common.dto.SubmitArticleDto;
 import com.publishing.common.lang.Result;
+import com.publishing.entity.Notice;
 import com.publishing.entity.Passage;
 import com.publishing.entity.RegisteredUser;
 import com.publishing.entity.Type;
 import com.publishing.mapper.RegisteredUserMapper;
+import com.publishing.service.NoticeService;
 import com.publishing.service.PassageService;
 import com.publishing.service.RegisteredUserService;
 import com.publishing.service.TypeService;
@@ -41,6 +43,9 @@ public class UploadController {
 
     @Autowired
     private TypeService typeService;
+
+    @Autowired
+    private NoticeService noticeService;
 
     @RequestMapping("/upload")
     public Map<String, Object> upload(@RequestParam("file") MultipartFile file, @RequestParam("title") String filename) throws IOException {
@@ -105,6 +110,8 @@ public class UploadController {
             typeService.save(new Type(newPassage.getId(), s.substring(1, s.length()-1)));
         }
         file.transferTo(file_server);
+        noticeService.save(new Notice(1L, "作者 " + dto.getAuthor() + " 上传了新的文章" +
+                "，文章ID为" +newPassage.getId()+",题目为《"+newPassage.getTitle()+"》,请前往未处理文章查看。"));
         return Result.succeed(200, "上传成功", null);
     }
 }

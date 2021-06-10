@@ -50,4 +50,9 @@ public class NoticeController {
         noticeService.updateById(notice);
         return Result.succeed(null);
     }
+
+    @RequestMapping("/getMessageNum")
+    public Result getMessageNum(@RequestParam("user_id") Long userId) {
+        return Result.succeed(noticeService.count(new QueryWrapper<Notice>().eq("receiver_id", userId).eq("has_read", 0)));
+    }
 }
