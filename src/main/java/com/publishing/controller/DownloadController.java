@@ -11,8 +11,7 @@ import java.io.*;
 @RestController
 @Slf4j
 public class DownloadController {
-
-    @Value("${storage.pathname}")
+    @org.springframework.beans.factory.annotation.Value("${storage.pathname}")
     private String pathname;
 
     @RequestMapping("/download")
