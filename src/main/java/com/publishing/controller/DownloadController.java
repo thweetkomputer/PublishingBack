@@ -2,18 +2,21 @@ package com.publishing.controller;
 
 import com.publishing.common.lang.Result;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 
 @RestController
 @Slf4j
 public class DownloadController {
+
+    @Value("${storage.pathname}")
+    private String pathname;
+
     @RequestMapping("/download")
     public Result downloadFile(@RequestParam("filename") Long passageId, HttpServletResponse response) {
-        String pathname = "/Users/jerryZhao/Desktop/";
         if (passageId != null) {
             //设置文件路径
             File file = new File(pathname + passageId + ".pdf");

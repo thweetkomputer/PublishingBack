@@ -136,10 +136,16 @@ public class SearchController {
     public Result searchByWriter(@RequestParam("page") int page,
                                  @RequestParam("pageSize") int pageSize,
                                  @RequestParam("input") String writerName) {
-        int startPage = (page - 1) * pageSize;
-        List<Passage> passageList = passageService.list(new QueryWrapper<Passage>().eq("writer_id", userService.getOne(new QueryWrapper<RegisteredUser>().eq("username", writerName)).getId()).eq("published", 1));
-        for (Passage p : passageList) {
-            p.setType(userService.getById(p.getWriterId()).getUsername());
+        List<Passage> passageList;
+        int startPage;
+        try{
+            startPage = (page - 1) * pageSize;
+            passageList= passageService.list(new QueryWrapper<Passage>().eq("writer_id", userService.getOne(new QueryWrapper<RegisteredUser>().eq("username", writerName)).getId()).eq("published", 1));
+            for (Passage p : passageList) {
+                p.setType(userService.getById(p.getWriterId()).getUsername());
+            }
+        } catch (Exception e) {
+            return Result.fail("该作者不存在");
         }
         return Result.succeed(MapUtil.builder()
                 .put("article_list", passageList.subList(startPage, Math.min(startPage + pageSize, passageList.size())))
