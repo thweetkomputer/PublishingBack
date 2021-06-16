@@ -1,5 +1,6 @@
 package com.publishing.controller;
 
+import cn.hutool.Hutool;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.crypto.SecureUtil;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 @RestController
 public class AccountController {
@@ -97,6 +99,58 @@ public class AccountController {
                 .map()
         );
 
+    }
+
+    @RequestMapping("/addReviewer")
+    public Result addReviewer(@RequestParam("username") String username, @RequestParam("email") String email) {
+        RegisteredUser user = userService.getOne(new QueryWrapper<RegisteredUser>().eq("username", username));
+        if (username == null || username.equals("")) {
+            return Result.fail("用户名不能为空");
+        }
+        if (email == null || email.equals("")) {
+            return Result.fail("邮箱不能为空");
+        }
+        if (user != null) {
+            return Result.fail("用户名已存在");
+        }
+        if (!Pattern.compile("^.+@.+\\.+.+").matcher(email).matches()) {
+            return Result.fail("邮箱格式不正确");
+        }
+        RegisteredUser registeredUser = new RegisteredUser();
+        registeredUser.setUsername(username);
+        registeredUser.setEmail(email);
+        registeredUser.setIsWriter(0);
+        registeredUser.setIsEdit(0);
+        registeredUser.setPassword(SecureUtil.md5("123456"));
+        registeredUser.setIsReviewer(1);
+        userService.save(registeredUser);
+        return Result.succeed(200, "添加成功", null);
+    }
+
+    @RequestMapping("/addWriter")
+    public Result addWriter(@RequestParam("username") String username, @RequestParam("email") String email) {
+        RegisteredUser user = userService.getOne(new QueryWrapper<RegisteredUser>().eq("username", username));
+        if (username == null || username.equals("")) {
+            return Result.fail("用户名不能为空");
+        }
+        if (email == null || email.equals("")) {
+            return Result.fail("邮箱不能为空");
+        }
+        if (user != null) {
+            return Result.fail("用户名已存在");
+        }
+        if (!Pattern.compile("^.+@.+\\.+.+").matcher(email).matches()) {
+            return Result.fail("邮箱格式不正确");
+        }
+        RegisteredUser registeredUser = new RegisteredUser();
+        registeredUser.setUsername(username);
+        registeredUser.setEmail(email);
+        registeredUser.setIsWriter(1);
+        registeredUser.setIsEdit(0);
+        registeredUser.setPassword(SecureUtil.md5("123456"));
+        registeredUser.setIsReviewer(0);
+        userService.save(registeredUser);
+        return Result.succeed(200, "添加成功", null);
     }
 
     @PostMapping("/changePass")
