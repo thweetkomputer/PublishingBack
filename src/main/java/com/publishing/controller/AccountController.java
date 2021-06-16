@@ -154,32 +154,32 @@ public class AccountController {
     }
 
     @PostMapping("/changePass")
-    public Result changePassword(@Validated @RequestBody ChangePassDto ChangePassDto) {
+    public Result changePassword(@Validated @RequestBody ChangePassDto changePassDto) {
 
 
-        RegisteredUser user = userService.getOne(new QueryWrapper<RegisteredUser>().eq("username", ChangePassDto.getUsername()).eq("email", ChangePassDto.getEmail()));
+        RegisteredUser user = userService.getOne(new QueryWrapper<RegisteredUser>().eq("username", changePassDto.getUsername()).eq("email", changePassDto.getEmail()));
 
         if (user == null) {
             return Result.fail("用户名不存在或邮箱错误");
         }
 
-        if (!ChangePassDto.getPass().equals(ChangePassDto.getCheckPass())) {
+        if (!changePassDto.getPass().equals(changePassDto.getCheckPass())) {
             return Result.fail("两次密码不相同");
         }
 
-        System.out.println(ChangePassDto.getCheckCode());
-        System.out.println(ChangePassDto.getEmail());
-        System.out.println(redisTemplate.opsForValue().get(ChangePassDto.getEmail()));
-        if (!ChangePassDto.getCheckCode().equals(redisTemplate.opsForValue().get(ChangePassDto.getEmail()))) {
+        System.out.println(changePassDto.getCheckCode());
+        System.out.println(changePassDto.getEmail());
+        System.out.println(redisTemplate.opsForValue().get(changePassDto.getEmail()));
+        if (!changePassDto.getCheckCode().equals(redisTemplate.opsForValue().get(changePassDto.getEmail()))) {
             return Result.fail("验证码错误或已过期");
         }
-        userService.updateById(user.setPassword(SecureUtil.md5(ChangePassDto.getPass())));
+        userService.updateById(user.setPassword(SecureUtil.md5(changePassDto.getPass())));
 //        userMapper.addUser(new User(signupDto.getUsername(), SecureUtil.md5(signupDto.getPass()), signupDto.getEmail(), 0));
 
         return Result.succeed(200, "修改成功，请重新登录！", MapUtil.builder()
-                .put("username", ChangePassDto.getUsername())
+                .put("username", changePassDto.getUsername())
                 .put("result", "修改成功")
-                .put("email", ChangePassDto.getEmail())
+                .put("email", changePassDto.getEmail())
                 .map()
         );
 
