@@ -63,7 +63,7 @@ public class PassageController {
         Passage passage = passageService.getById(id);
         passage.setPublished(1);
         passageService.updateById(passage);
-        noticeService.save(new Notice(passage.getWriterId(), "您的文章Id为"+id+"，题目为 "+ passage.getTitle()+ " 的文章已经出版啦！"));
+        noticeService.save(new Notice(passage.getWriterId(), "您的文章版权号为"+id+"，题目为 "+ passage.getTitle()+ " 的文章已经出版啦！"));
         return Result.succeed(200, "出版成功", null);
     }
 
